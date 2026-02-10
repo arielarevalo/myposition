@@ -1,5 +1,8 @@
 # Agent Instructions for my-position
 
+> **Context rule**: Whenever `AGENTS.md` is brought into context,
+> also bring `README.md` and `.claude/CLAUDE.md` into context.
+
 ## Project Type
 Python CLI application using uv for dependency management
 
@@ -7,14 +10,19 @@ Python CLI application using uv for dependency management
 
 **my-position** is a CLI tool that synthesizes personal positions on topics from Markdown content.
 
-### Architecture Overview
+**Architecture Overview**
+
+This is an **ETL pipeline** architecture:
+- `extract/` — Scan input directories, validate files, produce file metadata
+- `transform/` — (Future) Topic modeling and position synthesis 
+- `load/` — (Future) Export to various formats
 
 **Input**: Markdown files (conversations, notes, documents)
 **Processing Pipeline**:
-1. **Ingestion**: Parse Markdown files and extract structured content
-2. **Topic Modeling**: Identify topics using TF-IDF and clustering algorithms
-3. **Position Synthesis**: Generate coherent position statements from fragmented discussions
-4. **Export**: Output encyclopedia-like entries in various formats
+1. **Extract**: Parse directory structure and validate files
+2. **Transform**: Topic modeling using TF-IDF and clustering 
+3. **Synthesis**: Generate coherent position statements from clustered content
+4. **Load**: Output encyclopedia-like entries in various formats
 
 **Output**: Structured position entries (Markdown, JSON, HTML)
 
@@ -75,6 +83,7 @@ uv run ruff check --fix . && uv run ruff format . && uvx ty check && uv run pyte
 ## Project-Specific Conventions
 
 ### Code Style
+- **OOP**: Prefer classes and class hierarchies over standalone functions
 - Use src layout: `src/my_position/`
 - Type hints required on all functions
 - Google-style docstrings

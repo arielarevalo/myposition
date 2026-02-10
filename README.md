@@ -94,18 +94,32 @@ my-position/
 │   └── my_position/           # Main package
 │       ├── __init__.py
 │       ├── main.py            # CLI entry point
-│       ├── ingest/            # Markdown ingestion (coming soon)
-│       ├── modeling/          # Topic modeling engine (coming soon)
-│       ├── synthesis/         # Position synthesis (coming soon)
-│       └── export/            # Export formats (coming soon)
+│       ├── cli.py             # CLI implementation
+│       ├── extract/           # ETL: Extract layer
+│       │   ├── __init__.py
+│       │   ├── models.py      # Data models
+│       │   ├── validators.py  # File validators
+│       │   └── scanner.py     # Directory scanner
+│       ├── transform/         # ETL: Transform layer (future)
+│       └── load/              # ETL: Load layer (future)
 ├── tests/                     # Test suite
-│   ├── test_main.py
+│   ├── extract/               # Extract layer tests
+│   ├── test_cli.py            # CLI tests
+│   ├── test_e2e.py            # End-to-end tests
 │   └── conftest.py
 ├── .github/
 │   └── workflows/
 │       └── ci.yml             # GitHub Actions CI
 └── pyproject.toml             # Project config & dependencies
 ```
+
+### ETL Pipeline
+
+**Extract**: Scan input directories for `conversations/`, `notes/`, and `documents/` subdirectories. Validate files based on extension and size constraints. Produce categorized file metadata with content hashes for deduplication.
+
+**Transform** (future): Topic modeling identifies themes and clusters related content.
+
+**Load** (future): Export encyclopedia-style position entries in various formats.
 
 ### Data Flow
 
@@ -120,12 +134,14 @@ Service-specific connectors (Slack, Notion, Obsidian, etc.) will be maintained i
 
 ## Roadmap
 
-- [ ] **Phase 1**: Markdown ingestion and parsing
+- [ ] **Phase 1**: File extraction and parsing
+  - [x] **Stage 1**: File extraction & file-level validation (CLI integration)
+  - [ ] **Stage 2**: Content-aware validation (speaker detection, structure analysis)
+  - [ ] **Stage 3**: Markdown parsing & content extraction
 - [ ] **Phase 2**: Topic modeling engine (TF-IDF, clustering)
 - [ ] **Phase 3**: Position synthesis from clustered content
-- [ ] **Phase 4**: CLI interface with commands (ingest, synthesize, export)
-- [ ] **Phase 5**: Export formats (Markdown, JSON, HTML)
-- [ ] **Phase 6**: Connector framework and reference implementations
+- [ ] **Phase 4**: Export formats (Markdown, JSON, HTML)
+- [ ] **Phase 5**: Connector framework and reference implementations
 
 ## Contributing
 

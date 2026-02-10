@@ -1,22 +1,17 @@
 """Tests for main module."""
 
-from typing import TYPE_CHECKING
-
-import pytest
+from io import StringIO
+from unittest.mock import patch
 
 from my_position.main import main
 
-if TYPE_CHECKING:
-    pass
 
+def test_main_no_args_shows_help() -> None:
+    """Test main function with no args shows help."""
+    with patch("sys.stdout", new=StringIO()) as mock_stdout:
+        with patch("sys.argv", ["my-position"]):
+            main()
 
-def test_main(capsys: "pytest.CaptureFixture[str]") -> None:
-    """Test main function prints usage information."""
-    main()
-    captured = capsys.readouterr()
-    assert "my-position - Synthesize positions" in captured.out
-    assert "Usage:" in captured.out
-    assert "Commands:" in captured.out
-    assert "ingest" in captured.out
-    assert "synthesize" in captured.out
-    assert "export" in captured.out
+        output = mock_stdout.getvalue()
+        assert "my-position" in output.lower()
+        assert "synthesize" in output.lower() or "extract" in output.lower()
